@@ -1,26 +1,216 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================================================
+   THEME — edit these hex values to restyle the whole site.
+   Tailwind v4 reads this block directly (no tailwind.config.ts),
+   and turns every entry into a utility class:
+     --color-paper  ->  bg-paper / text-paper / border-paper
+     --font-display ->  font-display
+     --radius-xl2   ->  rounded-xl2
+   Change a hex here and the whole site updates.
+   ========================================================= */
+@theme {
+  /* Dusty blue, top to bottom. The page, the section bands and the
+     cards are three shades of the same blue-grey family, so the cards
+     read as raised paper rather than as stark white cut-outs — that's
+     what `--color-paper` being a cool near-white rather than #ffffff
+     is doing. Teddy tan is the one warm note left, and it appears in
+     exactly one place: the Venmo/Zelle panel.
+     Every text/surface pairing below clears WCAG AA (4.5:1). */
+  --color-bg: #e6edf4; /* page — dusty blue */
+  --color-bg-2: #cfdfec; /* soft glows behind the page */
+  --color-band: #dae5f0; /* alternating section bands */
+  --color-paper: #fbfcfe; /* cards — cool near-white, never pure #fff */
+  --color-paper-2: #eef3f9; /* inputs, subtle fills */
+  --color-ink: #1e2c38; /* body text */
+  --color-ink-soft: #51647a; /* muted text */
+  --color-deep: #3a6486; /* dusty blue — buttons, links */
+  --color-deep-2: #21405a; /* deepest blue — headings */
+  --color-slate: #4d6479; /* eyebrows and small caps */
+  --color-gold: #e0b184; /* teddy tan — the gift panel, and only there */
+  --color-navy: #232f3e; /* Amazon's own navy — the registry panel */
+  --color-error: #b3261e; /* form validation only — 6.4:1 on a card */
+  --color-line: #1e2c3820;
+
+  /* The --font-* vars on the right are injected by next/font in layout.tsx */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-karla), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --radius-xl2: 14px;
+}
+/* ========================================================= */
+
+body {
+  background-image: radial-gradient(circle at 15% 10%, var(--color-bg-2) 0%, transparent 45%),
+    radial-gradient(circle at 90% 85%, var(--color-bg-2) 0%, transparent 40%);
+  background-attachment: fixed;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-full bg-deep px-6 py-3.5 text-[15px] font-bold text-paper shadow-lg shadow-deep/25 transition-transform hover:-translate-y-0.5;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-full border-[1.5px] border-deep px-6 py-3.5 text-[15px] font-bold text-deep transition-colors hover:bg-paper-2;
+  }
+  /* The standard raised-paper card. Every panel on the site uses this,
+     so card styling is changed in exactly one place. */
+  .card {
+    @apply rounded-xl2 border border-line bg-paper;
+    box-shadow: 0 1px 2px rgba(30, 44, 56, 0.05), 0 12px 28px -14px rgba(30, 44, 56, 0.24);
+  }
+  /* Alternating tinted blocks that give the long vertical page some
+     rhythm. The negative margin lets the tint reach the screen edges
+     on phones while the text stays on the same left edge as everywhere
+     else. */
+  .section-band {
+    @apply -mx-6 mt-14 rounded-[26px] bg-band px-6 py-10 md:mt-20 md:px-8;
+  }
+  .input {
+    @apply w-full rounded-lg border-[1.5px] border-line bg-paper-2 px-3.5 py-2.5 text-[14.5px] text-ink;
+    @apply outline-none focus:border-deep focus:bg-paper;
+  }
+  /* The "Text us / Email us" pair at the bottom of the home page */
+  .contact-tile {
+    @apply flex flex-col gap-0.5 rounded-xl2 border-[1.5px] border-line bg-paper-2 px-4 py-3.5 transition-colors hover:border-deep/40 hover:bg-paper;
+  }
+  .contact-tile-label {
+    @apply font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-soft;
+  }
+  .contact-tile-value {
+    @apply text-[15px] font-bold text-deep-2;
+  }
+  .eyebrow {
+    @apply font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-slate;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================================================
+   BENNY, trotting along the bottom of the page.
+
+   `pointer-events: none` on the wrapper is what guarantees he can
+   never intercept a click — the z-index only decides what he paints
+   over, and he sits below the sticky header either way.
+   ========================================================= */
+/* The stage clips him at the viewport edges. Without it, a fixed element
+   translated past 100vw can widen the document and produce a stray
+   horizontal scrollbar. */
+.benny-stage {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 76px;
+  z-index: 20;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.benny-runner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 108px;
+  opacity: 0.92;
+  animation: benny-trot 26s linear infinite;
+  will-change: transform;
+}
+
+/* Both turns happen while he's parked off-screen, so you never see
+   him flip — he just runs off one side and comes back from it. */
+@keyframes benny-trot {
+  0% {
+    transform: translateX(-120px) scaleX(1);
+  }
+  45% {
+    transform: translateX(calc(100vw + 30px)) scaleX(1);
+  }
+  50% {
+    transform: translateX(calc(100vw + 30px)) scaleX(-1);
+  }
+  95% {
+    transform: translateX(-120px) scaleX(-1);
+  }
+  100% {
+    transform: translateX(-120px) scaleX(1);
+  }
+}
+
+.benny-bob {
+  animation: benny-bob 0.42s ease-in-out infinite alternate;
+}
+@keyframes benny-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2.5px);
+  }
+}
+
+/* Each leg pivots around its own top edge. `transform-box: fill-box`
+   makes the percentage origin resolve against the shape's own box
+   instead of the whole SVG viewBox. */
+.benny-leg {
+  transform-box: fill-box;
+  transform-origin: 50% 6%;
+  animation: benny-step 0.42s ease-in-out infinite alternate;
+}
+.benny-leg--back {
+  animation-direction: alternate-reverse;
+}
+@keyframes benny-step {
+  from {
+    transform: rotate(-26deg);
+  }
+  to {
+    transform: rotate(26deg);
+  }
+}
+
+.benny-tail {
+  transform-box: fill-box;
+  transform-origin: 100% 60%;
+  animation: benny-wag 0.3s ease-in-out infinite alternate;
+}
+@keyframes benny-wag {
+  from {
+    transform: rotate(-12deg);
+  }
+  to {
+    transform: rotate(10deg);
+  }
+}
+
+.benny-ear {
+  transform-box: fill-box;
+  transform-origin: 100% 80%;
+  animation: benny-flop 0.42s ease-in-out infinite alternate;
+}
+@keyframes benny-flop {
+  from {
+    transform: rotate(6deg);
+  }
+  to {
+    transform: rotate(-7deg);
+  }
+}
+
+/* Anyone who has asked their OS to cut down on motion gets a still,
+   parked Benny in the corner instead of a moving one. */
+@media (prefers-reduced-motion: reduce) {
+  .benny-runner {
+    animation: none;
+    transform: translateX(16px);
+  }
+  .benny-stage {
+    height: 72px;
+  }
+  .benny-bob,
+  .benny-leg,
+  .benny-tail,
+  .benny-ear {
+    animation: none;
+  }
 }
