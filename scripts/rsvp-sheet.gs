@@ -14,10 +14,10 @@
 // Must match RSVP_SHARED_SECRET in your .env.local and in Vercel.
 // It's not real security — it just stops a stray bot that finds the URL
 // from filling your sheet with junk. Change both sides together.
-const SHARED_SECRET = 'change-me-to-something-random';
+const SHARED_SECRET = 'test';
 
 // The tab the rows are written to. Created automatically if missing.
-const SHEET_NAME = 'RSVPs';
+const SHEET_NAME = 'test';
 
 // Column order. The first row of the sheet is written from `label`, and
 // each row is filled by reading `key` off the posted JSON.
