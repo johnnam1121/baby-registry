@@ -52,9 +52,11 @@ export async function submitRsvp(
   if (!name) {
     fieldErrors.name = "We need a name to put on the list.";
   }
-  if (!email) {
+  // Only required from people who are coming; someone who can't make it
+  // has nothing to be sent. Whatever is given still has to parse.
+  if (attending === "yes" && !email) {
     fieldErrors.email = "We need an email to reach you.";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  } else if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     fieldErrors.email = "That doesn't look like a valid email address.";
   }
 

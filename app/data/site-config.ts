@@ -9,9 +9,9 @@ export const siteConfig = {
   coupleNames: "John & Tiffany",
   babyName: "Baby Nam", // shown in the hero; use "Baby Boy Nam", a real name, whatever you like
   hero: {
-    eyebrow: "Please join us for a baby shower honoring",
+    eyebrow: "Please join us for a baby shower celebrating",
     subhead:
-      "We'd love to have you there. Come eat, say hi, and help us get ready for the little one.",
+      "We'd love to have you there! Come say hi, eat, and help us get ready for our little one.",
   },
 
   // --- The party ---------------------------------------------------
@@ -21,7 +21,7 @@ export const siteConfig = {
     timeStart: "1:00 PM",
     timeEnd: "4:00 PM",
     // Short lines listed as "good to know" bullets under the date.
-    notes: ["Food & drinks provided", "Free on-site parking"],
+    notes: ["Food & drinks provided", "Please no alcohol or smoking/vaping! We will get in trouble", "Free on-site parking"],
     address: {
       line1: "18900 Copper Breaks Xing",
       line2: "Cypress, TX 77433",
@@ -31,19 +31,19 @@ export const siteConfig = {
   // --- Gifts -------------------------------------------------------
   gifts: {
     // TODO: your exact Venmo username, including the @
-    venmoHandle: "@Your-Venmo",
+    venmoHandle: "@Jellychews",
     // TODO: the phone number or email your bank has linked to Zelle
-    zelleHandle: "you@example.com",
-    amazonRegistryUrl: "https://www.amazon.com/baby-reg/1E6TBC4VNOCMY",
+    zelleHandle: "Johnnam93@gmail.com",
+    amazonRegistryUrl: "https://www.amazon.com/baby-reg/your-registry/1E6TBC4VNOCMY?ref_=br_dsk_tbnr_yr",
   },
 
   // --- Questions? (bottom of the page) -----------------------------
   contact: {
     // TODO: the number guests should text. Digits only in `phoneRaw`.
-    phoneDisplay: "(555) 123-4567",
-    phoneRaw: "+15551234567",
+    phoneDisplay: "(832) 455-7478",
+    phoneRaw: "+8324557478",
     // TODO: the email guests should write to.
-    email: "you@example.com",
+    email: "Johnnam93@gmail.com",
   },
 
   // --- RSVP --------------------------------------------------------
@@ -52,16 +52,11 @@ export const siteConfig = {
     deadline: "September 6, 2026",
   },
 
-  // --- Benny (the /benny gallery + the little guy trotting along
-  //     the bottom of every page) ------------------------------------
+  // --- Benny (the /benny gallery) -----------------------------------
   dog: {
     name: "Benny",
-    breed: "Border collie",
+    breed: "Border collie (probably)",
     specialty: "Tennis balls",
-    bio:
-      "Benny has been the baby of the house for a while now, and he's taking " +
-      "the demotion in stride. He supervises every nap, inspects every " +
-      "delivery, and has already claimed the nursery rug as his own.",
   },
 
   // --- Footer ------------------------------------------------------

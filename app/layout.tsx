@@ -3,7 +3,6 @@ import { Fraunces, Karla, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import BennyRunner from "@/components/BennyRunner";
 import { siteConfig } from "@/data/site-config";
 
 const fraunces = Fraunces({
@@ -50,7 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         {children}
         <SiteFooter />
-        <BennyRunner />
       </body>
     </html>
   );

@@ -165,46 +165,62 @@ photo's own pixels, so nudge them until the face is centred. The script
 writes `app/icon.png` (browser tabs) and `app/apple-icon.png` (phone home
 screens); Next.js picks both up from those filenames automatically.
 
-**The little Benny trotting along the bottom** of every page is
-`app/components/BennyRunner.tsx`. He's drawn as vector shapes, not a GIF, so
-he costs nothing to load. Everything about how he behaves lives in the
-`.benny-*` rules at the bottom of `app/globals.css`:
-
-- **Speed** — the `26s` in `.benny-runner`'s `animation`. Bigger = slower.
-- **Size** — the `width: 108px` in `.benny-runner`.
-- **Remove him** — delete `<BennyRunner />` from `app/layout.tsx`.
-
-He can never intercept a click: `.benny-stage` is `pointer-events: none`,
-and that's independent of where he sits in the stacking order. Anyone whose
-device is set to "reduce motion" gets a parked, still Benny instead.
-
 ---
 
 ## 5. Colors and fonts
 
-The palette is the `@theme` block at the top of `app/globals.css`. It's
-dusty blue top to bottom — the page (`#e6edf4`), the section bands
-(`#dae5f0`) and the cards (`#fbfcfe`) are three shades of one blue-grey
-family. Two things are deliberate:
+The palette is the `@theme` block at the top of `app/globals.css`. The home
+page is a stack of **full-bleed bands**, each with its own background
+colour, and five surfaces do all the work:
 
-- **No pure white anywhere.** Cards being a cool near-white rather than
-  `#ffffff` is what stops them reading as stark cut-outs.
+| Variable        | Hex       | Where                        |
+| --------------- | --------- | ---------------------------- |
+| `--color-denim` | `#3f6a88` | soft dusty blue — the hero   |
+| `--color-bg`    | `#f2f6fa` | cool light — Details, Benny  |
+| `--color-band`  | `#e3edf6` | powder blue — Gifts, footer  |
+| `--color-sand`  | `#f8efe3` | warm sand — RSVP             |
+| `--color-blush` | `#f9ece9` | soft blush — Questions       |
+
+Four things are deliberate:
+
+- **Only the hero goes deep.** Everything below it is pale, which is what
+  keeps a long scroll feeling light rather than heavy.
+- **The four pale bands sit at nearly the same lightness** and differ
+  mostly in temperature. That's what makes the page change colour as you
+  scroll without any one section shouting.
+- **Cards are the only pure white on the site.** The band underneath
+  carries the tone, so white is what makes a card read as sitting on top
+  of the page rather than cut out of it.
 - **Teddy tan appears in exactly one place** — the Venmo/Zelle panel. It's
-  the single warm note, which is what keeps it feeling like an accent
-  instead of a second theme.
+  the single strong warm accent, which is what keeps it from becoming a
+  second theme.
 
 Every text/surface pairing in that block clears WCAG AA (4.5:1), including
-each ink colour against all four surfaces. If you change a hex, keep an eye
-on readability.
+each ink colour against all five surfaces. If you change a hex, keep an eye
+on readability. `--color-ink` / `--color-ink-soft` are the text colours on
+the pale bands; `--color-chalk` / `--color-chalk-soft` are their
+light-on-denim counterparts — that second pair is the tightest on the site
+at 4.6:1, so lightening `--color-denim` means re-checking it.
 
-Three classes further down the same file do the structural work, so you
-change them once and the whole site follows:
+Classes further down the same file do the structural work, so you change
+them once and the whole site follows:
 
+- **`.section--denim` / `--bg` / `--band` / `--sand` / `--blush`** — the band
+  colours. A section picks one by passing `tone` to `<Section>` in
+  `app/page.tsx`. They are sequenced so no two neighbours repeat; to reorder
+  the page, move the components in `HomePage` and re-check that no two
+  touching sections share a tone.
+- **`.section--denim` also flips what's inside it** — cards, eyebrows and
+  contact tiles switch to their light-on-dark versions automatically, so a
+  section is made dark by changing its `tone` and nothing else.
+- **`.shell`** — the 680px centred column. Sections are full width; this is
+  what keeps the text on one line all the way down.
 - **`.card`** — corner radius, border and shadow for every panel.
-- **`.section-band`** — the tinted blocks. A section gets one by passing
-  `banded` to `<Section>` in `app/page.tsx`; they currently alternate
-  (Gifts and Benny are banded, the rest sit on the bare page).
-- **`.eyebrow`** — the small uppercase labels above each heading.
+- **`.eyebrow`** / **`.section-title`** — the small uppercase label and the
+  heading above each section.
+- **`.btn-primary`** and **`.btn-on-denim`** — the same button on a pale
+  band and on the denim one. A blue pill on blue has nowhere near enough
+  contrast, so the hero uses the white version.
 
 `--color-error` is used only by the RSVP form's validation messages — it's
 deliberately a red rather than a theme colour, because an error that's the

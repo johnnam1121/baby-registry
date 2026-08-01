@@ -17,7 +17,7 @@ export default function RsvpForm() {
   if (state.status === "success") {
     return (
       <div className="card p-8 text-center">
-        <p className="mb-4 text-4xl" aria-hidden="true">
+        <p className="mb-4 text-5xl" aria-hidden="true">
           🧸
         </p>
         <h2 className="mb-3 font-display text-2xl font-semibold text-deep-2">
@@ -81,14 +81,21 @@ export default function RsvpForm() {
             error={state.fieldErrors.name}
           />
 
+          {/* Only required from people who are coming — we need a way to
+              reach them if something changes on the day. There's nothing
+              to send someone who's already told us they can't make it. */}
           <Field
             label="Email"
             name="email"
             type="email"
-            required
+            required={attending === "yes"}
             autoComplete="email"
             placeholder="jane@example.com"
-            hint="So we can send you any updates before the shower."
+            hint={
+              attending === "yes"
+                ? "So we can send you any updates before the shower."
+                : "Only if you'd like us to keep you in the loop."
+            }
             error={state.fieldErrors.email}
           />
 
@@ -100,7 +107,7 @@ export default function RsvpForm() {
                 type="tel"
                 autoComplete="tel"
                 placeholder="(555) 123-4567"
-                hint="Optional — only used if something changes the day of."
+                hint="Only used if something changes the day of."
               />
 
               <div className="grid gap-5 sm:grid-cols-2">
@@ -122,7 +129,7 @@ export default function RsvpForm() {
                   min={0}
                   max={30}
                   placeholder="0"
-                  hint="Optional — helps us plan food."
+                  hint="Helps us plan food."
                   error={state.fieldErrors.kidsCount}
                 />
               </div>
@@ -134,7 +141,7 @@ export default function RsvpForm() {
                 required
                 rows={3}
                 placeholder="Jane Doe, John Doe, Emma (age 4)"
-                hint="First and last names, so we can make name tags."
+                hint=""
                 error={state.fieldErrors.guestNames}
               />
 
@@ -144,7 +151,7 @@ export default function RsvpForm() {
                 as="textarea"
                 rows={2}
                 placeholder="Peanut allergy, one vegetarian"
-                hint="Optional."
+                hint=""
               />
             </>
           )}
@@ -156,7 +163,7 @@ export default function RsvpForm() {
             name="note"
             as="textarea"
             rows={3}
-            placeholder="Optional — a note for the parents-to-be."
+            placeholder="Ex. a note for the parents-to-be."
           />
 
           <div className="pt-2">
@@ -182,6 +189,11 @@ export default function RsvpForm() {
 
 /* ------------------------------------------------------------------ */
 
+/**
+ * The real radio is visually hidden and replaced by the ring below, so the
+ * selected state is carried by an actual control shape rather than only by
+ * the card's border colour — colour alone isn't enough on its own.
+ */
 function ChoiceCard({
   value,
   checked,
@@ -197,9 +209,9 @@ function ChoiceCard({
 }) {
   return (
     <label
-      className={`flex cursor-pointer items-center gap-3 rounded-xl2 border-[1.5px] px-4 py-4 transition-colors ${
+      className={`flex cursor-pointer items-center gap-3 rounded-xl2 border px-4 py-4 transition-colors ${
         checked
-          ? "border-deep bg-deep/10"
+          ? "border-deep bg-deep/8"
           : "border-line bg-paper-2 hover:border-deep/40"
       }`}
     >
@@ -212,11 +224,19 @@ function ChoiceCard({
         className="sr-only"
         required
       />
-      <span aria-hidden="true" className="text-xl">
+      <span
+        aria-hidden="true"
+        className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border-[1.5px] transition-colors ${
+          checked ? "border-deep" : "border-ink-soft/50"
+        }`}
+      >
+        {checked && <span className="h-2.5 w-2.5 rounded-full bg-deep" />}
+      </span>
+      <span aria-hidden="true" className="text-xl leading-none">
         {emoji}
       </span>
       <span
-        className={`text-[15px] font-bold ${checked ? "text-deep-2" : "text-ink"}`}
+        className={`text-[15px] font-semibold ${checked ? "text-deep-2" : "text-ink"}`}
       >
         {label}
       </span>

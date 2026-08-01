@@ -23,14 +23,11 @@ export default function BennyPage() {
 
       <header className="mb-12 text-center">
         <p className="eyebrow mb-3">The big brother</p>
-        <h1 className="mb-5 font-display text-5xl font-semibold leading-tight text-deep-2">
+        <h1 className="font-display text-5xl font-semibold leading-tight text-deep-2">
           Meet {dog.name}
         </h1>
-        <p className="mx-auto max-w-[52ch] text-[17px] leading-relaxed text-ink-soft">
-          {dog.bio}
-        </p>
 
-        <dl className="mx-auto mt-9 grid max-w-[520px] grid-cols-3 gap-3">
+        <dl className="mx-auto mt-8 grid max-w-[520px] grid-cols-3 gap-3">
           <Fact label="Breed" value={dog.breed} />
           <Fact label="Specialty" value={dog.specialty} />
           <Fact label="Status" value="Big brother" />
@@ -58,10 +55,7 @@ export default function BennyPage() {
         ))}
       </div>
 
-      <div className="mt-14 text-center">
-        <p className="mb-7 font-display text-xl italic text-ink-soft">
-          He&apos;s counting on you to bring him a treat.
-        </p>
+      <div className="mt-14 border-t border-line pt-12 text-center">
         <Link href="/rsvp" className="btn-primary">
           RSVP to the shower
         </Link>

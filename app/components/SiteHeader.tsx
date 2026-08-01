@@ -19,32 +19,41 @@ export default function SiteHeader() {
   const onGallery = pathname === "/benny";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur">
       <div className="mx-auto flex max-w-[680px] items-center justify-between gap-3 px-6 py-3.5">
+        {/* The bear sits in a soft tinted disc rather than loose next to
+            the names — it keeps the emoji from floating and gives the mark
+            a consistent size across platforms, whose bears all differ. */}
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2 font-display text-lg font-semibold text-deep"
+          className="flex shrink-0 items-center gap-2.5 text-deep-2"
+          aria-label={`${siteConfig.coupleNames} — home`}
         >
-          <span aria-hidden="true">🧸</span>
-          <span className="hidden sm:inline">
-            {first} <span className="text-slate">&</span> {second}
+          <span
+            aria-hidden="true"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-deep/10 text-[17px] leading-none"
+          >
+            🧸
           </span>
-          <span className="sm:hidden">
-            {first[0]} <span className="text-slate">&</span> {second[0]}
+          <span className="hidden font-display text-[17px] font-semibold sm:inline">
+            {first} <span className="font-normal text-slate">&</span> {second}
+          </span>
+          <span className="font-display text-[17px] font-semibold sm:hidden">
+            {first[0]} <span className="font-normal text-slate">&</span> {second[0]}
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1.5">
+        <nav className="flex items-center gap-1">
           <Link
             href="/benny"
             aria-current={onGallery ? "page" : undefined}
-            className={`rounded-full px-3 py-2 text-[13.5px] font-semibold transition-colors ${
+            className={`rounded-full px-3.5 py-2 text-[13.5px] font-semibold transition-colors ${
               onGallery
                 ? "bg-paper-2 text-deep-2"
                 : "text-ink-soft hover:bg-paper-2 hover:text-deep-2"
             }`}
           >
-            <span aria-hidden="true" className="mr-1">
+            <span aria-hidden="true" className="mr-1.5">
               🐶
             </span>
             {siteConfig.dog.name}
@@ -52,7 +61,7 @@ export default function SiteHeader() {
 
           <Link
             href="/rsvp"
-            className="rounded-full bg-deep px-4 py-2 text-sm font-bold text-paper shadow-md shadow-deep/25 transition-transform hover:-translate-y-0.5"
+            className="rounded-full bg-deep px-4.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-deep-2"
           >
             RSVP
           </Link>

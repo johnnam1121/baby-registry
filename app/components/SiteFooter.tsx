@@ -1,24 +1,27 @@
 import Link from "next/link";
 import { siteConfig } from "@/data/site-config";
 
+/**
+ * Powder blue, one step deeper than the pale bands above it — enough to
+ * close the page off without going dark. On the home page it follows the
+ * blush "Questions?" block, so the two don't run together.
+ */
 export default function SiteFooter() {
   const { footer, dog } = siteConfig;
 
   return (
-    <footer className="mt-8 border-t border-line">
-      <div className="mx-auto flex max-w-[680px] flex-col items-center gap-3 px-6 py-9 text-center">
-        <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13.5px] text-ink-soft">
-          <span>
-            Made with 🧸 by{" "}
-            <strong className="font-bold text-deep-2">{footer.builtBy}</strong> ·{" "}
-            {footer.year}
-          </span>
+    <footer className="bg-band">
+      <div className="shell flex flex-col items-center gap-2 py-10 text-center">
+        <p className="text-[13.5px] text-ink-soft">
+          Made with 🧸 by{" "}
+          <span className="font-semibold text-deep-2">{footer.builtBy}</span> ·{" "}
+          {footer.year}
         </p>
         <p className="text-[13px] text-ink-soft">
           Quality assurance by{" "}
           <Link
             href="/benny"
-            className="font-bold text-deep underline underline-offset-2"
+            className="font-semibold text-deep underline underline-offset-2"
           >
             {dog.name}
           </Link>

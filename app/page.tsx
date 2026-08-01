@@ -6,9 +6,17 @@ import { fullAddress, mapEmbedUrl, mapLinkUrl, siteConfig } from "@/data/site-co
 
 const { event, gifts, contact, hero, dog } = siteConfig;
 
+/**
+ * One long page, built as a stack of full-bleed bands. Each section names
+ * its own surface colour through the `tone` prop and the colours are
+ * sequenced so no two neighbours repeat: the denim hero, then cool, powder
+ * blue, warm sand, cool again, and blush for the closing block. Only the
+ * hero goes deep — everything below it stays pale, which is what keeps a
+ * long scroll feeling light. See `.section--*` in `app/globals.css`.
+ */
 export default function HomePage() {
   return (
-    <main className="mx-auto max-w-[680px] px-6 pb-20">
+    <main>
       <Hero />
       <Details />
       <Gifts />
@@ -23,23 +31,24 @@ export default function HomePage() {
 
 function Hero() {
   return (
-    <section className="border-b border-line py-16 text-center md:py-24">
-      <p className="mb-5 text-4xl" aria-hidden="true">
-        🧸
-      </p>
-      <p className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-soft">
-        {hero.eyebrow}
-      </p>
-      <h1 className="mb-6 font-display text-5xl font-semibold leading-[1.05] text-deep-2 md:text-6xl">
-        {siteConfig.babyName}
-      </h1>
-      <p className="mb-8 font-display text-xl italic text-deep">{event.dateLong}</p>
-      <p className="mx-auto mb-9 max-w-[42ch] text-[17px] leading-relaxed text-ink-soft">
-        {hero.subhead}
-      </p>
-      <Link href="/rsvp" className="btn-primary">
-        RSVP
-      </Link>
+    <section className="section--denim">
+      <div className="shell py-20 text-center md:py-28">
+        <p className="mb-5 text-5xl" aria-hidden="true">
+          🧸
+        </p>
+        <p className="eyebrow mb-6">{hero.eyebrow}</p>
+        <h1 className="font-display text-[52px] font-semibold leading-[1.02] text-chalk md:text-[68px]">
+          {siteConfig.babyName}
+        </h1>
+        <div className="rule my-8" />
+        <p className="mb-6 font-display text-xl italic text-chalk">{event.dateLong}</p>
+        <p className="mx-auto mb-10 max-w-[42ch] text-[17px] leading-relaxed text-chalk-soft">
+          {hero.subhead}
+        </p>
+        <Link href="/rsvp" className="btn-on-denim">
+          RSVP
+        </Link>
+      </div>
     </section>
   );
 }
@@ -48,27 +57,27 @@ function Hero() {
 
 function Details() {
   return (
-    <Section eyebrow="The Details" title="When & where">
+    <Section eyebrow="The Details" title="When & where" tone="bg">
       <div className="card p-7">
         <dl className="space-y-6">
           <Row label="Date">
-            <p className="text-[17px] font-bold text-deep-2">{event.dateLong}</p>
+            <p className="text-[17px] font-semibold text-deep-2">{event.dateLong}</p>
           </Row>
 
           <Row label="Time">
-            <p className="text-[17px] font-bold text-deep-2">
+            <p className="text-[17px] font-semibold text-deep-2">
               {event.timeStart} – {event.timeEnd}
             </p>
           </Row>
 
           <Row label="Where">
-            <p className="text-[17px] font-bold text-deep-2">{event.address.line1}</p>
+            <p className="text-[17px] font-semibold text-deep-2">{event.address.line1}</p>
             <p className="text-[15px] text-ink-soft">{event.address.line2}</p>
             <a
               href={mapLinkUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-block text-[14px] font-bold text-deep underline underline-offset-2"
+              className="mt-2 inline-block text-[14px] font-semibold text-deep underline underline-offset-2"
             >
               Open in Maps →
             </a>
@@ -105,7 +114,7 @@ function Details() {
           href={mapLinkUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between gap-3 border-t border-line px-5 py-3.5 text-[14px] font-bold text-deep transition-colors hover:bg-paper-2"
+          className="flex items-center justify-between gap-3 border-t border-line px-5 py-3.5 text-[14px] font-semibold text-deep transition-colors hover:bg-paper-2"
         >
           <span>{fullAddress}</span>
           <span aria-hidden="true">↗</span>
@@ -117,21 +126,35 @@ function Details() {
 
 /* ------------------------------------------------------------------ */
 
+/**
+ * Three asks, in descending order of how much they'd help us, and the
+ * order matters: cash, then the registry, then the book.
+ *
+ * The book request has to come last and it has to be introduced as
+ * "instead of a card", because on its own it flatly contradicts the line
+ * above it asking people not to carry gifts to the party. Framed as a
+ * swap for the card everyone was bringing anyway, it isn't a contradiction
+ * — it's the same gesture in a different object. Keep that framing if you
+ * reword any of this.
+ */
 function Gifts() {
   return (
-    <Section eyebrow="Gifts" title="If you'd like to bring something" banded>
+    <Section eyebrow="Gifts" title="If you'd like to bring something" tone="band">
       <div className="card p-7">
+        <p className="mb-4 text-[16px] leading-relaxed text-ink">
+          We&apos;re grateful for everyone celebrating with us — your presence is more
+          than enough.
+        </p>
         <p className="mb-7 text-[16px] leading-relaxed text-ink">
-          Your presence is honestly the whole point — but a few people have asked, so
-          here it is.{" "}
-          <strong className="text-deep-2">
-            A cash gift is the most helpful thing by far
-          </strong>
-          : no shipping, no returns, no fees, and it goes straight toward what we still
-          need.
+          If you&apos;d like to give a gift,{" "}
+          <strong className="font-semibold text-deep-2">
+            a cash contribution is the most helpful and flexible
+          </strong>{" "}
+          option as we finish preparing for our little one. Thank you for being part of
+          this exciting chapter with us!
         </p>
 
-        <div className="rounded-xl2 border-[1.5px] border-gold bg-gold/30 p-5">
+        <div className="rounded-xl2 border border-gold bg-gold/25 p-5">
           <p className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-deep-2/80">
             Venmo or Zelle
           </p>
@@ -141,17 +164,65 @@ function Gifts() {
           </div>
         </div>
 
-        <div className="my-7 flex items-center gap-4">
-          <span className="h-px flex-1 bg-line" />
-          <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">
-            or shop the registry
-          </span>
-          <span className="h-px flex-1 bg-line" />
-        </div>
+        <Divider label="or shop the registry" />
+
+        <p className="mb-6 text-[16px] leading-relaxed text-ink">
+          If you&apos;d rather pick out something specific, our registry is below.
+          Everything on it ships straight to our door — so please don&apos;t bring
+          wrapped gifts to the shower. It saves you carrying them, and us finding
+          somewhere to put them on the day. Thank you!
+        </p>
 
         <AmazonRegistryButton />
+
+        <Divider label="instead of a card" />
+
+        <BookRequest />
       </div>
     </Section>
+  );
+}
+
+/**
+ * The "bring a book" ask. Deliberately the softest panel in the section —
+ * no border, no button — because it's the one thing here that isn't really
+ * about gifts.
+ */
+function BookRequest() {
+  return (
+    <div className="rounded-xl2 bg-blush p-5">
+      <div className="mb-3 flex items-center gap-3">
+        <span
+          aria-hidden="true"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/70 text-lg leading-none"
+        >
+          📚
+        </span>
+        <p className="font-display text-xl font-semibold text-deep-2">
+          Bring a book, not a card
+        </p>
+      </div>
+      <p className="text-[15.5px] leading-relaxed text-ink">
+        If you'd like, instead of bringing a card, feel free to bring a favorite
+        children's book with a note written inside the cover. Whether it's a book you
+        loved growing up or one you'd like to share with Baby Nam, we'd love to build a
+        library filled with stories from the people we care about.      </p>
+      <p className="mt-3 text-[14px] italic leading-relaxed text-ink-soft">
+        New, secondhand, or well-loved and dog-eared — all equally welcome.
+      </p>
+    </div>
+  );
+}
+
+function Divider({ label }: { label: string }) {
+  return (
+    <div className="my-7 flex items-center gap-4">
+      <span className="h-px flex-1 bg-line" />
+      <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">
+        {label}
+      </span>
+      <span className="h-px flex-1 bg-line" />
+    </div>
   );
 }
 
@@ -161,7 +232,7 @@ function Handle({ method, value }: { method: string; value: string }) {
       <span className="w-14 shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-ink-soft">
         {method}
       </span>
-      <span className="flex-1 truncate text-[15px] font-bold text-deep-2">{value}</span>
+      <span className="flex-1 truncate text-[15px] font-semibold text-deep-2">{value}</span>
       <CopyButton text={value} />
     </div>
   );
@@ -171,11 +242,12 @@ function Handle({ method, value }: { method: string; value: string }) {
 
 function Rsvp() {
   return (
-    <Section eyebrow="RSVP" title="Let us know you're coming">
+    <Section eyebrow="RSVP" title="Please let us know if you're coming" tone="sand">
       <div className="card p-8 text-center">
         <p className="mx-auto mb-7 max-w-[40ch] text-[16px] leading-relaxed text-ink-soft">
-          It takes about a minute, and it tells us how much food to plan for. Please
-          reply by <strong className="text-deep-2">{siteConfig.rsvp.deadline}</strong>.
+          Please RSVP by{" "}
+          <strong className="font-semibold text-deep-2">{siteConfig.rsvp.deadline}</strong>
+          . To ensure we have a proper headcount for food!
         </p>
         <Link href="/rsvp" className="btn-primary">
           RSVP now
@@ -189,10 +261,10 @@ function Rsvp() {
 
 function MeetBenny() {
   return (
-    <Section eyebrow="The big brother" title={`Say hi to ${dog.name}`} banded>
+    <Section eyebrow="The big brother" title={`Say hi to ${dog.name}`} tone="bg">
       <Link
         href="/benny"
-        className="card group flex flex-col items-center gap-5 overflow-hidden p-6 text-center transition-transform hover:-translate-y-0.5 sm:flex-row sm:text-left"
+        className="card group flex flex-col items-center gap-5 overflow-hidden p-6 text-center transition-colors hover:border-deep/35 sm:flex-row sm:text-left"
       >
         <Image
           src="/benny/big-brother.jpg"
@@ -204,13 +276,13 @@ function MeetBenny() {
         />
         <span>
           <span className="mb-2 block font-display text-2xl font-semibold text-deep-2">
-            He&apos;s taking the promotion well
+            He&apos;s taking the promotion well~
           </span>
-          <span className="mb-3 block text-[15px] leading-relaxed text-ink-soft">
+          {/* <span className="mb-3 block text-[15px] leading-relaxed text-ink-soft">
             {dog.name} has been the baby of this house for years, and he has opinions
             about the new arrival. There are pictures.
-          </span>
-          <span className="text-[14.5px] font-bold text-deep group-hover:underline">
+          </span> */}
+          <span className="text-[14.5px] font-semibold text-deep group-hover:underline">
             See the whole gallery →
           </span>
         </span>
@@ -223,7 +295,7 @@ function MeetBenny() {
 
 function Questions() {
   return (
-    <Section eyebrow="Questions?" title="Just reach out">
+    <Section eyebrow="Questions?" title="Just reach out" tone="blush">
       <div className="card p-7">
         <p className="mb-6 text-[16px] leading-relaxed text-ink-soft">
           Anything at all — directions, what to bring, who else is coming. Text or email
@@ -242,6 +314,9 @@ function Questions() {
       </div>
 
       <p className="mt-12 text-center font-display text-lg italic text-ink-soft">
+        <span aria-hidden="true" className="mr-1.5 not-italic">
+          🧸
+        </span>
         Can&apos;t wait to see you. — {siteConfig.coupleNames}
       </p>
     </Section>
@@ -251,26 +326,29 @@ function Questions() {
 /* ------------------------------------------------------------------ */
 
 /**
- * `banded` sits the section on a tinted block instead of the bare page.
- * Alternating them down the page breaks up what would otherwise be one
- * very long uninterrupted scroll.
+ * `tone` picks the section's full-bleed background colour. The tones are
+ * defined as `.section--*` in `app/globals.css`; `denim` additionally flips
+ * the cards, eyebrows and contact tiles inside it to their light-on-dark
+ * versions, so a section is made dark by changing this prop alone.
  */
 function Section({
   eyebrow,
   title,
-  banded,
+  tone,
   children,
 }: {
   eyebrow: string;
   title: string;
-  banded?: boolean;
+  tone: "bg" | "band" | "sand" | "blush" | "denim";
   children: React.ReactNode;
 }) {
   return (
-    <section className={banded ? "section-band" : "pt-14 md:pt-20"}>
-      <p className="eyebrow mb-2">{eyebrow}</p>
-      <h2 className="mb-6 font-display text-3xl font-semibold text-deep-2">{title}</h2>
-      {children}
+    <section className={`section section--${tone}`}>
+      <div className="shell">
+        <p className="eyebrow mb-2">{eyebrow}</p>
+        <h2 className="section-title mb-7">{title}</h2>
+        {children}
+      </div>
     </section>
   );
 }
