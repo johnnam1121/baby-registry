@@ -205,6 +205,12 @@
      click on the backdrop, which is how close-on-outside-click works. */
   .fund-dialog {
     @apply w-[min(32rem,calc(100vw-2rem))] rounded-xl2 border border-line bg-paper p-0 text-ink;
+    /* The browser centres a modal <dialog> by giving it `inset: 0` plus
+       `margin: auto`. Tailwind's preflight resets `margin: 0` on every
+       element, which silently cancels that half of the rule and pins the
+       dialog to the top-left. Putting `auto` back is the whole fix — don't
+       replace it with a transform, the UA positioning is already correct. */
+    margin: auto;
     max-height: min(86vh, 48rem);
     box-shadow: 0 24px 60px -20px rgba(26, 42, 54, 0.45);
   }

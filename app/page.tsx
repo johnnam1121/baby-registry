@@ -140,7 +140,7 @@ function Details() {
  */
 function Gifts() {
   return (
-    <Section eyebrow="Gifts" title="If you'd like to bring something" tone="band">
+    <Section eyebrow="Gifts" tone="band">
       <div className="card p-7">
         <p className="mb-4 text-[16px] leading-relaxed text-ink">
           We&apos;re grateful for everyone celebrating with us — your presence is more
@@ -350,15 +350,17 @@ function Section({
   children,
 }: {
   eyebrow: string;
-  title: string;
+  /* Optional: a section can lead with just its eyebrow. When it does, the
+     eyebrow carries the gap the heading would have left behind. */
+  title?: string;
   tone: "bg" | "band" | "sand" | "blush" | "denim";
   children: React.ReactNode;
 }) {
   return (
     <section className={`section section--${tone}`}>
       <div className="shell">
-        <p className="eyebrow mb-2">{eyebrow}</p>
-        <h2 className="section-title mb-7">{title}</h2>
+        <p className={`eyebrow ${title ? "mb-2" : "mb-7"}`}>{eyebrow}</p>
+        {title && <h2 className="section-title mb-7">{title}</h2>}
         {children}
       </div>
     </section>

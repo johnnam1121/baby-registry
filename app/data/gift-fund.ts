@@ -91,7 +91,12 @@ function parseContribution(row: unknown): Contribution | null {
   if (typeof row !== "object" || row === null) return null;
   const r = row as Record<string, unknown>;
   const amount = Number(r.amount);
-  if (!r.id || !Number.isFinite(amount)) return null;
+  // `> 0`, not merely finite. A stray row in the sheet — a duplicated header
+  // is the usual one — parses to an amount of 0 and would otherwise be
+  // counted as a real person who gave nothing, so the fund reads
+  // "1 person has contributed" against a total of $0. The form already
+  // refuses anything at or below zero, so no genuine row is lost here.
+  if (!r.id || !Number.isFinite(amount) || amount <= 0) return null;
 
   return {
     id: String(r.id),

@@ -138,7 +138,7 @@ export const bennyPhotos: BennyPhoto[] = [
   {
     src: "/benny/windowsill-snooze.jpg",
     alt: "Benny asleep with his chin on the windowsill and his tongue poking out",
-    caption: "Tongue out, lights off",
+    caption: "Tongue out, lights out",
     width: 1536,
     height: 2048,
   },

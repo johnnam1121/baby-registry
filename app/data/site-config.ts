@@ -48,13 +48,13 @@ export const siteConfig = {
   // counting toward the card. (They'd still count toward the total.)
   giftFund: {
     // The heading and paragraph above the combined progress bar.
-    overallLabel: "Want to conribute towards something specific?",
+    overallLabel: "Want to contribute towards something specific?",
     overallBlurb:
       "Please feel free to contribute to one of these bigger items below and tell us what you sent!",
     items: [
       {
         id: "Uppababy Vista v3 Callum Baby Stroller",
-        name: "Baby Stroller & Infant Car Seat",
+        name: "Stroller & Infant Car Seat",
         blurb: "Uppababy Vista v3 Callum Baby Stroller and Aria v2 Infant Car Seat",
         goal: 1250,
         image: "/gifts/stroller.png",
