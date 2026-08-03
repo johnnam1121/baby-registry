@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AmazonRegistryButton from "@/components/AmazonRegistryButton";
 import CopyButton from "@/components/CopyButton";
+import GiftFund from "@/components/GiftFund";
 import { fullAddress, mapEmbedUrl, mapLinkUrl, siteConfig } from "@/data/site-config";
 
 const { event, gifts, contact, hero, dog } = siteConfig;
@@ -163,8 +164,16 @@ function Gifts() {
             <Handle method="Zelle" value={gifts.zelleHandle} />
           </div>
         </div>
+      </div>
 
-        <Divider label="or shop the registry" />
+      {/* Sits between the two cards rather than inside either: it follows
+          straight on from the handles above it ("here's where to send it"
+          → "here's what it goes toward"), and out here the carousel can
+          bleed past the column so the next card peeks off the edge. */}
+      <GiftFund />
+
+      <div className="card mt-5 p-7">
+        <Divider label="or shop the registry" tight />
 
         <p className="mb-6 text-[16px] leading-relaxed text-ink">
           If you&apos;d rather pick out something specific, our registry is below.
@@ -203,10 +212,12 @@ function BookRequest() {
         </p>
       </div>
       <p className="text-[15.5px] leading-relaxed text-ink">
-        If you'd like, instead of bringing a card, feel free to bring a favorite
-        children's book with a note written inside the cover. Whether it's a book you
-        loved growing up or one you'd like to share with Baby Nam, we'd love to build a
-        library filled with stories from the people we care about.      </p>
+        If you&apos;d like, instead of bringing a card, feel free to bring a favorite
+        children&apos;s book with a note written inside the cover. Whether it&apos;s a
+        book you loved growing up or one you&apos;d like to share with{" "}
+        {siteConfig.babyName}, we&apos;d love to build a library filled with stories
+        from the people we care about.
+      </p>
       <p className="mt-3 text-[14px] italic leading-relaxed text-ink-soft">
         New, secondhand, or well-loved and dog-eared — all equally welcome.
       </p>
@@ -214,9 +225,10 @@ function BookRequest() {
   );
 }
 
-function Divider({ label }: { label: string }) {
+/** `tight` drops the top margin, for a divider that opens a card. */
+function Divider({ label, tight }: { label: string; tight?: boolean }) {
   return (
-    <div className="my-7 flex items-center gap-4">
+    <div className={`${tight ? "mb-7" : "my-7"} flex items-center gap-4`}>
       <span className="h-px flex-1 bg-line" />
       <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">
         {label}

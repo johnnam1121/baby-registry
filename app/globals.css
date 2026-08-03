@@ -166,4 +166,49 @@
   .rule {
     @apply mx-auto h-px w-14 bg-current opacity-35;
   }
+
+  /* ---------------------------------------------------------------
+     GIFT FUND CAROUSEL
+     The track is a plain scroll container — the browser does the
+     swiping, momentum and keyboard scrolling; the arrows and dots in
+     `GiftFundCarousel.tsx` only call `scrollTo` on it.
+     --------------------------------------------------------------- */
+  .fund-track {
+    @apply flex snap-x snap-mandatory gap-4 overflow-x-auto pt-1 pb-3;
+    /* Pull out to the shell's own gutter (px-6) so a card can peek past
+       the edge of the screen, which is what signals "this scrolls". */
+    margin-inline: -1.5rem;
+    padding-inline: 1.5rem;
+    scroll-padding-inline-start: 1.5rem;
+    scrollbar-width: none;
+  }
+  .fund-track::-webkit-scrollbar {
+    display: none;
+  }
+  /* The track is keyboard-focusable, so it needs a visible focus ring —
+     but only for keyboard users, hence focus-visible. */
+  .fund-track:focus-visible {
+    outline: 2px solid var(--color-deep);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* Under 100% on purpose: the sliver of the next card is what tells you
+     there is more to scroll to. `snap-start` pairs with the active-card
+     maths in GiftFundCarousel.tsx — changing one means changing the other. */
+  .fund-card {
+    @apply w-[80%] shrink-0 snap-start sm:w-[46%];
+  }
+
+  /* A native <dialog>: the backdrop, focus trap and Esc handling are the
+     browser's. `p-0` because the padding belongs to the inner wrapper —
+     that way a click landing on the dialog itself is unambiguously a
+     click on the backdrop, which is how close-on-outside-click works. */
+  .fund-dialog {
+    @apply w-[min(32rem,calc(100vw-2rem))] rounded-xl2 border border-line bg-paper p-0 text-ink;
+    max-height: min(86vh, 48rem);
+    box-shadow: 0 24px 60px -20px rgba(26, 42, 54, 0.45);
+  }
+  .fund-dialog::backdrop {
+    background-color: rgba(26, 42, 54, 0.5);
+  }
 }

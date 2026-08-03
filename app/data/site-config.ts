@@ -37,6 +37,55 @@ export const siteConfig = {
     amazonRegistryUrl: "https://www.amazon.com/baby-reg/your-registry/1E6TBC4VNOCMY?ref_=br_dsk_tbnr_yr",
   },
 
+  // --- The gift fund -----------------------------------------------
+  // The cards in the carousel — add or remove as many as you like, the
+  // carousel follows the array. Guests send money by Venmo or Zelle using
+  // the handles above, then log what they sent against one of these;
+  // nothing here takes a payment, it only keeps a running total.
+  //
+  // `id` is what ties a logged contribution to its card, so don't rename
+  // an id once people have started contributing — those rows would stop
+  // counting toward the card. (They'd still count toward the total.)
+  giftFund: {
+    // The heading and paragraph above the combined progress bar.
+    overallLabel: "Want to conribute towards something specific?",
+    overallBlurb:
+      "Please feel free to contribute to one of these bigger items below and tell us what you sent!",
+    items: [
+      {
+        id: "Uppababy Vista v3 Callum Baby Stroller",
+        name: "Baby Stroller & Infant Car Seat",
+        blurb: "Uppababy Vista v3 Callum Baby Stroller and Aria v2 Infant Car Seat",
+        goal: 1250,
+        image: "/gifts/stroller.png",
+      },
+      // Both goals: $439.99 list at Albee Baby, less 20%, plus 8.25% Texas
+      // sales tax (6.25% state + 2% local — Cypress is at the cap).
+      // 439.99 × 0.80 = 351.99; × 1.0825 = 381.03. Shipping is free over $99.
+      {
+        id: "carSeatMom",
+        name: "Mom Car Seat",
+        blurb: "Chicco Fit360 ClearTex Rotating Convertible Car Seat — Titanium",
+        goal: 380,
+        image: "/gifts/chiccoTitanium.png",
+      },
+      {
+        id: "carSeatDad",
+        name: "Dad Car Seat",
+        blurb: "Chicco Fit360 ClearTex Rotating Convertible Car Seat — Carbon",
+        goal: 380,
+        image: "/gifts/chiccoCarbon.png",
+      },
+      // {
+      //   id: "monitor",
+      //   name: "Baby monitor",
+      //   blurb: "So we can watch him sleep instead of sleeping.",
+      //   goal: 200,
+      //   image: "/gifts/monitor.jpg",
+      // },
+    ],
+  },
+
   // --- Questions? (bottom of the page) -----------------------------
   contact: {
     // TODO: the number guests should text. Digits only in `phoneRaw`.

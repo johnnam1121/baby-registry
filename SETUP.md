@@ -133,7 +133,88 @@ Existing rows keep their old columns; new rows fill the new one.
 
 ---
 
-## 4. Benny
+## 4. Wire up the gift fund
+
+The cards in the carousel are a **tally, not a checkout**. Guests send money
+with the Venmo or Zelle handles they already see above the carousel, then
+tap **Contribute** and tell us what they sent. Nothing on this site takes a
+payment or touches a card, and the totals are only ever as accurate as what
+guests type — which is exactly why you can delete a row.
+
+### a. Edit the cards
+
+They live in `giftFund.items` in `app/data/site-config.ts`:
+
+```ts
+{
+  id: "stroller",        // ties a logged contribution to this card
+  name: "Baby Stroller",
+  blurb: "Uppababy Vista v3 Callum Baby Stroller",
+  goal: 1250,
+  image: "/gifts/stroller.png",
+}
+```
+
+Rename anything, change the goals, add or remove cards — the carousel, the
+dots and the combined bar all follow the array, however many there are.
+`overallLabel` and `overallBlurb` just above the array are the heading and
+paragraph over the combined progress bar.
+
+Two rules:
+
+- **Don't change an `id` once people have started contributing.** Their rows
+  point at the old id, so the card would drop back to $0. (The combined
+  total still counts them, because it sums the rows rather than the cards.)
+- **Images live in `public/gifts/`** and `image` is the path to one. The card
+  shows them in a square, scaled to fit rather than cropped — so a square
+  photo fills it exactly and anything else gets tidy bars down the sides.
+  Nothing is ever cut off.
+
+### b. Make the sheet
+
+Same routine as the RSVP sheet in step 3, but a **separate spreadsheet and a
+separate deployment**:
+
+1. New Google Sheet → **Extensions → Apps Script**.
+2. Paste in all of `scripts/gift-fund-sheet.gs`.
+3. Change `SHARED_SECRET` at the top to a random string — a *different* one
+   from the RSVP script's.
+4. **Deploy → New deployment → Web app**, with **Execute as: Me** and **Who
+   has access: Anyone**. Copy the `/exec` URL.
+
+Then add three values to `.env.local` **and** to Vercel:
+
+```
+GIFT_FUND_SHEET_WEBHOOK_URL=https://script.google.com/macros/s/..../exec
+GIFT_FUND_SHARED_SECRET=the-same-random-string-as-the-script
+GIFT_FUND_ADMIN_PASSWORD=whatever-you-want-to-type
+```
+
+Unlike the RSVP script this one reads and deletes as well as writes, because
+the site shows a running total and you need to be able to remove a bad row.
+All three go through the one `doPost`, told apart by an `action` field.
+
+### c. Fixing a wrong entry
+
+Go to **`/gifts/admin`**, type your `GIFT_FUND_ADMIN_PASSWORD`, and every
+logged contribution is listed newest-first with a Delete button. Deleting
+removes the row from the Sheet and updates every total on the site
+immediately. There's no undo here — the Sheet's own **File → Version
+history** is the safety net.
+
+The page is `noindex`, and it's locked to everyone (including you) until
+`GIFT_FUND_ADMIN_PASSWORD` is set. Sign-in lasts 12 hours.
+
+### d. If you'd rather not run the fund at all
+
+Leave `GIFT_FUND_SHEET_WEBHOOK_URL` unset. The cards still render with their
+goals, every total sits at $0, and anyone who taps **Contribute** is told to
+text you instead — the same way the RSVP form behaves without its webhook.
+To remove the fund outright, delete `<GiftFund />` from `app/page.tsx`.
+
+---
+
+## 5. Benny
 
 **The gallery** at `/benny` is driven by `app/data/benny-photos.ts`. To add a
 photo: drop the file into `public/benny/`, then add an entry:
@@ -167,7 +248,7 @@ screens); Next.js picks both up from those filenames automatically.
 
 ---
 
-## 5. Colors and fonts
+## 6. Colors and fonts
 
 The palette is the `@theme` block at the top of `app/globals.css`. The home
 page is a stack of **full-bleed bands**, each with its own background
@@ -235,14 +316,17 @@ couple's names collapse to initials so both links still fit.
 
 ---
 
-## 6. Deploy
+## 7. Deploy
 
 Push to GitHub, then import the repo at https://vercel.com/new. Before the
-first deploy, under **Environment Variables**, add the same two values from
-step 3(f):
+first deploy, under **Environment Variables**, add the values from step 3(f)
+and step 4(b):
 
 - `RSVP_SHEET_WEBHOOK_URL`
 - `RSVP_SHARED_SECRET`
+- `GIFT_FUND_SHEET_WEBHOOK_URL`
+- `GIFT_FUND_SHARED_SECRET`
+- `GIFT_FUND_ADMIN_PASSWORD`
 
 Vercel builds and gives you a URL. To use your own domain: **Settings →
 Domains**.
@@ -252,22 +336,30 @@ Domains**.
 
 ---
 
-## What happens if the sheet breaks
+## What happens if a sheet breaks
 
-If the webhook URL is missing, wrong, or Google is down, the guest sees a
-clear message telling them to text you instead — their RSVP is never
-silently dropped, and the error is logged in your Vercel function logs.
+If a webhook URL is missing, wrong, or Google is down, the guest sees a
+clear message telling them to text you instead — their RSVP or contribution
+is never silently dropped, and the error is logged in your Vercel function
+logs.
+
+The gift fund fails a little more softly than the RSVP form, because it also
+*reads*: if the read fails, the cards render with every total at $0 rather
+than taking the home page down. So a fund that suddenly shows $0 across the
+board means the webhook is unreachable, not that the rows are gone. Check
+the Sheet before you panic.
 
 ---
 
 ## What's no longer here
 
-The earlier version of this site had a browsable item grid, a cash-fund page
-with claim tracking, and an admin panel, all backed by Upstash Redis. Those
-were removed — the site now points at Amazon for the item list and has no
-database at all. Nothing to pay for, nothing to keep running.
+The earlier version of this site had a browsable item grid and an admin
+panel backed by Upstash Redis. That's gone — the item list points at Amazon
+now, and the gift fund in step 4 keeps its rows in a Google Sheet instead,
+so there's still no database to pay for or keep running.
 
 The `UPSTASH_*` and `ADMIN_KEY` lines still sitting in your `.env.local` are
-left over from that version and can be deleted.
+left over from that version and can be deleted. The gift fund's own admin
+passphrase is `GIFT_FUND_ADMIN_PASSWORD`, which is a different thing.
 
 If you ever want that code back, it's in the git history.
