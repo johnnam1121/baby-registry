@@ -24,12 +24,46 @@ const plexMono = IBM_Plex_Mono({
   weight: ["500", "600"],
 });
 
+const title = `${siteConfig.babyName}'s Baby Shower`;
+const description =
+  `Join ${siteConfig.coupleNames} for a baby shower on ` +
+  `${siteConfig.event.dateLong}, ${siteConfig.event.timeStart}–${siteConfig.event.timeEnd}, ` +
+  `in ${siteConfig.event.address.line2}.`;
+
+/**
+ * Where the site lives. Only used to turn the link-preview image into an
+ * absolute URL, which iMessage and Facebook both insist on.
+ *
+ * This normally needs no attention: Vercel fills its own domain in at
+ * build time. To point it somewhere else, set `siteUrl` in
+ * `app/data/site-config.ts`. The localhost fallback is for `npm run dev`.
+ */
+const vercelDomain =
+  process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+
+const siteUrl =
+  siteConfig.siteUrl ||
+  (vercelDomain ? `https://${vercelDomain}` : "http://localhost:3000");
+
 export const metadata: Metadata = {
-  title: `${siteConfig.babyName}'s Baby Shower`,
-  description:
-    `Join ${siteConfig.coupleNames} for a baby shower on ` +
-    `${siteConfig.event.dateLong}, ${siteConfig.event.timeStart}–${siteConfig.event.timeEnd}, ` +
-    `in ${siteConfig.event.address.line2}.`,
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  // The preview card apps show when the link is texted or posted. The
+  // image itself is drawn by `app/opengraph-image.tsx`; Next.js finds it
+  // by filename and fills in the og:image tags, so it isn't listed here.
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: title,
+    title,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 // ---------------------------------------------------------------------

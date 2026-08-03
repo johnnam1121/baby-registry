@@ -14,6 +14,12 @@ export const siteConfig = {
       "We'd love to have you there! Come say hi, eat, and help us get ready for our little one.",
   },
 
+  // The site's own address, e.g. "https://babynam.vercel.app". Only used
+  // to build the link-preview card people see when the URL is texted.
+  // Leave it empty and Vercel's own domain is used automatically — fill
+  // it in only if the site ever moves to a custom domain.
+  siteUrl: "",
+
   // --- The party ---------------------------------------------------
   event: {
     dateLong: "Sunday, September 20, 2026",
