@@ -75,13 +75,13 @@ export const siteConfig = {
         goal: 380,
         image: "/gifts/chiccoTitanium.png",
       },
-      {
-        id: "carSeatDad",
-        name: "Dad Car Seat",
-        blurb: "Chicco Fit360 ClearTex Rotating Convertible Car Seat — Carbon",
-        goal: 380,
-        image: "/gifts/chiccoCarbon.png",
-      },
+      // {
+      //   id: "carSeatDad",
+      //   name: "Dad Car Seat",
+      //   blurb: "Chicco Fit360 ClearTex Rotating Convertible Car Seat — Carbon",
+      //   goal: 380,
+      //   image: "/gifts/chiccoCarbon.png",
+      // },
       // {
       //   id: "monitor",
       //   name: "Baby monitor",
